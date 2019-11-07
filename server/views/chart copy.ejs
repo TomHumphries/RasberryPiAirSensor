@@ -1,0 +1,53 @@
+<%- include('./includes/head.ejs') %>
+<script src="/js/dygraph.js"></script>
+<script src="/js/synchronizer.js"></script>
+<script src="/js/crosshair.js"></script>
+<script src="/js/utils.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/dygraph.css">
+
+</head>
+
+<body>
+
+    <main>
+        <div id="graph-2p5" class="chart"></div>
+        <div id="graph-10" class="chart"></div>
+    </main>
+    <script>
+        // gs = [];
+        // // const yearMonth = new Date().toISOString().split('T')[0].substring(0, 7);
+        // g = new Dygraph(
+        // document.getElementById(`graph-2p5`),
+        // // For possible data formats, see http://dygraphs.com/data.html
+        // // The x-values could also be dates, e.g. "2012/03/15"
+        // `/data/<%= csv %>`,
+        // {
+        //     // options go here. See http://dygraphs.com/options.html
+        //     legend: 'always',
+        //     animatedZooms: false,
+        //     drawGrid: false,
+        //     plugins: [
+        //         new Dygraph.Plugins.Crosshair({
+        //         direction: "both"
+        //         })
+        //     ]
+        // });
+        // gs.push(g);            
+        // var sync = Dygraph.synchronize(gs, {range: false});
+    
+        // get data
+        
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(csvJSON(this.responseText));
+            }
+        };
+        xhttp.open("GET", "/data/pm10/<%= csv %>", true);
+        xhttp.send();
+
+        // const data10 = csvJSON(`/data/pm10/<%= csv %>`);
+        // console.log('data10', data10);
+
+    </script>
+<%- include('./includes/end.ejs') %>

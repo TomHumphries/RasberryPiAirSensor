@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <a class="navbar-brand" href="/">Air Sensor</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav w-100 d-flex align-items-center">
+      <li class="nav-item <%= page == 'logs' ? 'active' : '' %>">
+        <a class="nav-link" href="/logs">Data</a>
+      </li>
+      <li class="nav-item <%= page == 'settings' ? 'active' : '' %>">
+        <a class="nav-link" href="/settings">Settings</a>
+      </li>
+      <!-- <li class="nav-item">
+        <a class="nav-link" href="/location">Location</a>
+      </li> -->
+      <li class="nav-item ml-auto <%= page == 'settings' ? 'active' : '' %>">
+        <span class="text-muted">CPU: <span class="text-light"><%= cpuTemp %></span> °C</span>
+      </li>
+    </ul>
+  </div>
+</nav>

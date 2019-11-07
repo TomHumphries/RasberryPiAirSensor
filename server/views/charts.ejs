@@ -1,0 +1,15 @@
+<%- include('./includes/head.ejs') %>
+</head>
+
+<body>
+
+    <main>
+        <ul>
+            <% for (let csv of csvs) { %>
+            <li>
+                <a href="/charts/<%= csv %>"><%= csv %></a>
+            </li>
+            <% } %>
+        </ul>
+    </main>
+<%- include('./includes/end.ejs') %>

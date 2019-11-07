@@ -1,0 +1,14 @@
+<div class="d-flex border-bottom flex-column flex-md-row align-items-center justify-content-between">
+    <h1 class="font-weight-light text-center">Data</h1>
+    <div class="py-2">
+        <% if (dataLogging) { %>
+        <form action="/logs/post-stop" method="POST">
+            <button class="btn btn-danger" type="submit">Stop</button>
+        </form>
+        <% } else { %>
+        <form action="/logs/post-start" method="POST">
+            <button class="btn btn-success">Start new</button>
+        </form>
+        <% } %>
+    </div>
+</div>

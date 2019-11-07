@@ -1,0 +1,74 @@
+<%- include('./includes/head.ejs') %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+<script src="/js/utils.js"></script>
+
+</head>
+
+<body>
+
+    <%- include('./includes/nav.ejs') %>
+    <main>
+        <div style="width: 1000px">
+            <canvas id="chart" width="400" height="400"></canvas>
+        </div>
+    </main>
+    <script>
+        const seriesTypes = ['pm10', 'pm2p5'];
+        const series = [];
+
+        var xhttp_pm10 = new XMLHttpRequest();
+        xhttp_pm10.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(csvToPoints(this.responseText));
+                series.push({
+                    label: 'PM 10',
+                    borderColor: 'blue',
+					fill: false,
+                    data: csvToPoints(this.responseText)
+                })
+                if (series.length == 2) {
+                    makeChart(series);
+                }
+            }
+        };
+        xhttp_pm10.open("GET", `/data/pm10/<%= csv %>`, true);
+        xhttp_pm10.send();
+        var xhttp_pm2p5 = new XMLHttpRequest();
+        xhttp_pm2p5.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(csvToPoints(this.responseText));
+                series.push({
+                    label: 'PM 2.5',
+                    borderColor: 'red',
+					fill: false,
+                    data: csvToPoints(this.responseText)
+                })
+                if (series.length == 2) {
+                    makeChart(series);
+                }
+            }
+        };
+        xhttp_pm2p5.open("GET", `/data/pm2p5/<%= csv %>`, true);
+        xhttp_pm2p5.send();
+
+        function makeChart(datasets) {
+
+var ctx = document.getElementById('chart').getContext('2d');
+ctx.canvas.width = 1000;
+ctx.canvas.height = 300;
+var chart = new Chart(ctx, {
+  type: 'line',
+  data: { datasets: datasets },
+  options: {
+    scales: {
+      xAxes: [{
+        type: 'time'
+      }]
+    }
+  }
+});
+        }
+
+    </script>
+<%- include('./includes/end.ejs') %>

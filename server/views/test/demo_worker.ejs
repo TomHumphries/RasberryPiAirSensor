@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Count numbers: <output id="result"></output></p>
+<button onclick="startWorker()">Start Worker</button>
+<button onclick="stopWorker()">Stop Worker</button>
+
+<script>
+var w;
+var positions = [];
+
+function startWorker() {
+localStorage.clear();
+
+  if (typeof(Worker) !== "undefined") {
+    if (typeof(w) == "undefined") {
+      w = new Worker("./js/demo_worker.js");
+    }
+    w.onmessage = function(event) {
+      // document.getElementById("result").innerHTML = event.data;
+      getLocation();
+    };
+  } else {
+    document.getElementById("result").innerHTML = "Sorry! No Web Worker support.";
+  }
+}
+
+function stopWorker() {
+  w.terminate();
+  w = undefined;
+}
+
+function getLocation() {
+    console.log('getting location');
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          console.log('position', position);
+          console.log('positions', positions);
+          positions.push({latitude: position.coords.latitude, longitude: position.coords.longitude});
+          document.getElementById("result").innerHTML = localStorage.getItem('positions');
+            // showPosition(position);
+            // postPosition(position);
+            savePosition(position);
+        });
+    } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function savePosition(position) {
+  var storedPositions = JSON.parse(localStorage.getItem('positions'));
+  console.log(storedPositions);
+  if (!storedPositions)
+  {
+    storedPositions = [];
+  }
+  storedPositions.push({latitude: position.coords.latitude, longitude: position.coords.longitude, timestamp: new Date().toISOString()});
+  localStorage.setItem('positions', JSON.stringify(storedPositions));
+  console.log('stored positions', storedPositions);
+}
+function postPosition(position) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          console.log('POSTed')
+      }
+  };
+  xhttp.open("POST", "/location", true);
+  xhttp.setRequestHeader("Content-type", "application/json");
+  const locationJson = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+  }
+  xhttp.send(JSON.stringify(locationJson));
+}
+</script>
+
+</body>
+</html>

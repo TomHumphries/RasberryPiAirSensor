@@ -1,0 +1,64 @@
+<%- include('../includes/head.ejs') %>
+
+<script src="/js/dygraph.js"></script>
+<script src="/js/synchronizer.js"></script>
+<script src="/js/crosshair.js"></script>
+<script src="/js/utils.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/dygraph.css">
+
+</head>
+
+<body>
+
+    <%- include('../includes/nav.ejs') %>
+    <main>
+        <div class="container">
+            <div class="d-flex flex-md-row flex-column justify-content-md-between justify-content-center align-items-center py-2">
+                <!-- <h1 class="font-weight-light text-center"><%= file %></h1> -->
+                <form class="pr-3 py-1 w-100" action="/logs/<%= file %>/post-edit" method="POST">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="fileName" name="fileName" value="<%= file %>">                    
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit">Save</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="d-flex py-1">
+                    <% if (measuring && file == liveMeasurement) { %>
+                        <form action="/logs/post-stop?file=<%= file %>" method="POST">
+                            <button type="submit" class="btn btn-danger">Stop Logging</button>
+                        </form>
+                        <% } else { %>
+                        <form action="/logs/post-start?file=<%= file %>" method="POST">
+                            <button type="submit" class="btn btn-primary">Resume</button>
+                        </form>
+                        <% } %>
+                        <!-- <form class="px-1" action="/logs/<%= file %>/edit" method="POST">
+                            <button type="submit" class="btn btn-outline-primary">Rename</button>
+                        </form> -->
+                </div>
+            </div>
+            <div id="chart" style="width: 100%;"></div>
+        </div>
+    </main>
+    <script>
+        g = new Dygraph(document.getElementById("chart"), '/data/<%= file %>', 
+                {
+                    // options go here. See http://dygraphs.com/options.html
+                    legend: 'always',
+                    animatedZooms: false,
+                    drawGrid: false,
+                    plugins: [
+                        new Dygraph.Plugins.Crosshair({
+                        direction: "both"
+                        })
+                    ]
+                });
+            if (<%= measuring %>) {
+                setInterval(() => {
+                    console.log('updating...');
+                    g.updateOptions( { 'file': '/data/<%= file %>' } );
+                }, 2000);
+            }
+    </script>
+<%- include('../includes/end.ejs') %>

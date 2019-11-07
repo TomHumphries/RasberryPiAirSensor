@@ -1,0 +1,58 @@
+<%- include('./includes/head.ejs') %>
+
+</head>
+<body>
+
+    <%- include('./includes/nav.ejs') %>
+    
+    <p>chrome://flags/#unsafely-treat-insecure-origin-as-secure</p>
+
+    <p>Click the button to get your coordinates.</p>
+    
+    <button onclick="clickLocation()">Get location</button>
+    
+    <p id="demo"></p>
+    
+    <script>
+        var x = document.getElementById("demo");
+        
+        function clickLocation() {
+            getLocation();
+            setInterval(() => {
+                getLocation();
+            }, 5000);
+        }
+        function getLocation() {
+            console.log('getting location');
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    showPosition(position);
+                    postPosition(position);
+                });
+            } else { 
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            console.log('location', position);
+            x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
+        }
+        function postPosition(position) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log('POSTed')
+                }
+            };
+            xhttp.open("POST", "/location", true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            const locationJson = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            }
+            xhttp.send(JSON.stringify(locationJson));
+        }
+    </script>
+
+<%- include('./includes/end.ejs') %>

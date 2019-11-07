@@ -1,0 +1,5 @@
+<div class="list-group pt-2">
+    <% for (let file of files) { %>
+    <a class="list-group-item list-group-item-action <%= liveMeasurement == file ? 'active' : '' %>" href="/logs/<%= file %>"><%= file %></a>
+    <% } %>
+</div>

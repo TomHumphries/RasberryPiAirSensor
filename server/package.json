@@ -1,0 +1,22 @@
+{
+  "name": "airsensor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "connect-flash": "^0.1.1",
+    "dygraphs": "^2.1.0",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "node-cron": "^2.0.3",
+    "pi-temperature": "^2.1.0",
+    "sds011-client": "^1.0.1",
+    "serialport": "^7.1.5"
+  }
+}
